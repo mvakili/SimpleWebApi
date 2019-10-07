@@ -12,8 +12,9 @@ using WebApi.Entities;
 using WebApi.Configurations;
 using WebApi.ViewModels;
 using WebApi.ViewModels.UserModels;
-using WebApi.Exceptions.User;
 using System.Threading.Tasks;
+using WebApi.Exceptions.UserExceptions;
+
 namespace WebApi.Services
 {
     public class UserService : IUserService
