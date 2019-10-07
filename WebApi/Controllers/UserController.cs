@@ -3,10 +3,10 @@ using Microsoft.AspNetCore.Authorization;
 using WebApi.Services;
 using AutoMapper;
 using WebApi.ViewModels.UserModels;
-using WebApi.Exceptions.User;
 using System.Security.Claims;
 using System;
 using System.Threading.Tasks;
+using WebApi.Exceptions.UserExceptions;
 
 namespace WebApi.Controllers
 {
