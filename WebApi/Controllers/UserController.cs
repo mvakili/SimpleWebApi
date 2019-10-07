@@ -26,6 +26,11 @@ namespace WebApi.Controllers
         [HttpPost("login")]
         public IActionResult Login([FromBody]LoginViewModel input)
         {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
             try
             {
                 var token = _userService.Authenticate(input);
@@ -53,11 +58,6 @@ namespace WebApi.Controllers
         [HttpGet("profile")]
         public IActionResult GetAuthenticatedUser()
         {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-
             try
             {
                 if (HttpContext.User.Identity is ClaimsIdentity identity)
