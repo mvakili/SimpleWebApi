@@ -72,7 +72,7 @@ namespace WebApi.Services
                 PasswordHash = passwordHash,
                 Username = input.Username
             };
-
+            
             await _dbContext.Users.AddAsync(user);
             await _dbContext.SaveChangesAsync();
         }
