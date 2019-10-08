@@ -14,7 +14,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
 using WebApi.ViewModels.UserModels;
 using FluentValidation.AspNetCore;
-
+using Newtonsoft.Json.Serialization;
 
 namespace WebApi
 {
@@ -45,7 +45,8 @@ namespace WebApi
             #endregion
 
             services.AddCors();
-            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1).AddFluentValidation(fv => fv.RegisterValidatorsFromAssemblyContaining<Startup>());
+            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1).AddFluentValidation(fv => fv.RegisterValidatorsFromAssemblyContaining<Startup>())
+            .AddJsonOptions(option => option.SerializerSettings.ContractResolver = new DefaultContractResolver());
 
             #region Configure JWT
             // configure strongly typed settings objects
