@@ -5,9 +5,9 @@ using System.Linq.Expressions;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 
-namespace DataAccess
+namespace DataAccess.Repositories
 {
-    public abstract class BaseRepository<T> where T: class {
+    public abstract class BaseRepository<T> : IRepository<T> where T : class   {
         protected WebApiDbContext _context;
         public BaseRepository(WebApiDbContext dbContext) {
             _context = dbContext;
@@ -42,6 +42,32 @@ namespace DataAccess
         {
             return this.GetQueryable(match).SingleOrDefault();
         }
+
+        public T Single(Expression<Func<T, bool>> match)
+        {
+            return this.GetQueryable(match).Single();
+        }
+
+        public T FirstOrDefault(Expression<Func<T, bool>> match)
+        {
+            return this.GetQueryable(match).FirstOrDefault();
+        }
+
+        public T First(Expression<Func<T, bool>> match)
+        {
+            return this.GetQueryable(match).First();
+        }
+
+        public T LastOrDefault(Expression<Func<T, bool>> match)
+        {
+            return this.GetQueryable(match).LastOrDefault();
+        }
+
+        public T Last(Expression<Func<T, bool>> match)
+        {
+            return GetQueryable(match).Last();
+        }
+        
         public T Find(int id) {
             return _context.Find<T>(id);
         }
@@ -66,6 +92,10 @@ namespace DataAccess
         public Task SaveAsync() {
             return _context.SaveChangesAsync();
         }
-        
+
+        public bool Any(Expression<Func<T, bool>> match)
+        {
+            return this.GetQueryable(match).Any();
+        }
     }
 }

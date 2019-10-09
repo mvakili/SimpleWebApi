@@ -1,5 +1,7 @@
 using AutoMapper;
+using FluentValidation;
 using Model.Entities;
+using Model.Validators.UserValidators;
 using Model.ViewModels.UserModels;
 using System;
 
@@ -11,9 +13,17 @@ namespace Model.Mappers
         {
             CreateMap<User, UserViewModel>();
             CreateMap<RegisterViewModel, User>()
-                .AfterMap((viewMode, user) =>
+                .BeforeMap((viewModel, user) =>
                 {
-                    user.PasswordHash = Helpers.CryptoHelper.SHA1Hash(viewMode.Password);
+                    var validationResult = new RegisterViewModelValidator().Validate(viewModel);
+                    if (!validationResult.IsValid)
+                    {
+                        throw new ValidationException(validationResult.Errors);
+                    }
+                })
+                .AfterMap((viewModel, user) =>
+                {
+                    user.PasswordHash = Helpers.CryptoHelper.SHA1Hash(viewModel.Password);
                     user.Id = default(Guid);
                 });
         }

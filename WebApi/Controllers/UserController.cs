@@ -61,7 +61,7 @@ namespace WebApi.Controllers
             {
                 if (HttpContext.User.Identity is ClaimsIdentity identity)
                 {
-                    var user = _userService.GetUser(Guid.Parse(identity.FindFirst(ClaimTypes.Name).Value));
+                    var user = _userService.GetIdentityUser(identity);
                     return Ok(user);
                 } else
                 {

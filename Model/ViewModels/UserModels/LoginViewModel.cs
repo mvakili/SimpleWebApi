@@ -1,4 +1,4 @@
-﻿
+﻿using Model.Validators.UserValidators;
 
 namespace Model.ViewModels.UserModels
 {

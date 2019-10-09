@@ -16,6 +16,9 @@ using Business.Services;
 using Business.Configurations;
 using WebAPI.Middlewares;
 using Model.Mappers;
+using DataAccess.Repositories;
+using System.Collections.Generic;
+using Model.Entities;
 
 namespace WebApi
 {
@@ -46,7 +49,7 @@ namespace WebApi
             #endregion
 
             services.AddCors();
-            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1).AddFluentValidation(fv => fv.RegisterValidatorsFromAssemblyContaining<Startup>())
+            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1).AddFluentValidation(fv => fv.RegisterValidatorsFromAssemblyContaining<User>())
             .AddJsonOptions(option => option.SerializerSettings.ContractResolver = new DefaultContractResolver());
 
             #region Configure JWT
@@ -76,14 +79,32 @@ namespace WebApi
             });
             #endregion
 
+            #region Add Repositories
+            services.AddScoped<IUserRepository, UserRepository>();
+            #endregion
+
             #region Add Services
             services.AddScoped<IUserService, UserService>();
             #endregion
 
             #region Configure Swagger
-            services.AddSwaggerGen(c =>
-            {
-                c.SwaggerDoc("v1", new OpenApiInfo { Title = "My API", Version = "v1" });
+
+            services.AddSwaggerGen(c => {
+                c.SwaggerDoc("v1", new OpenApiInfo { Title = "You api title", Version = "v1" });
+                var securityScheme = new OpenApiSecurityScheme
+                {
+                    In = ParameterLocation.Header,
+                    Description = "Please enter into field the word 'Bearer' following by space and JWT",
+                    Name = "Authorization",
+                    Type = SecuritySchemeType.ApiKey
+                };
+                
+                c.AddSecurityDefinition("Bearer", securityScheme);
+                c.AddSecurityRequirement(new OpenApiSecurityRequirement
+                {
+                    { securityScheme, new List<string>() }
+                });
+                
             });
             #endregion
 
@@ -95,6 +116,15 @@ namespace WebApi
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
+
+                // Enable middleware to serve generated Swagger as a JSON endpoint.
+                app.UseSwagger();
+                // Enable middleware to serve swagger-ui (HTML, JS, CSS, etc.),
+                // specifying the Swagger JSON endpoint.
+                app.UseSwaggerUI(c =>
+                {
+                    c.SwaggerEndpoint("/swagger/v1/swagger.json", "My API V1");
+                });
             }
             else
             {
@@ -111,17 +141,6 @@ namespace WebApi
 
             app.UseAuthentication();
 
-            // Enable middleware to serve generated Swagger as a JSON endpoint.
-            app.UseSwagger();
-            // Enable middleware to serve swagger-ui (HTML, JS, CSS, etc.),
-            // specifying the Swagger JSON endpoint.
-            app.UseSwaggerUI(c =>
-            {
-                c.SwaggerEndpoint("/swagger/v1/swagger.json", "My API V1");
-            });
-
-
-            app.UseAuthentication();
             
             app.UseMvc();
         }
