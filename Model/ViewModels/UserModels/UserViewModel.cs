@@ -1,6 +1,6 @@
 using System;
 
-namespace WebApi.ViewModels.UserModels
+namespace Model.ViewModels.UserModels
 {
     public class UserViewModel {
         public Guid Id { get; set; }

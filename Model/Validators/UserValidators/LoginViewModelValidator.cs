@@ -1,10 +1,11 @@
 ﻿using FluentValidation;
+using Model.ViewModels.UserModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace WebApi.ViewModels.UserModels
+namespace Model.Validators.UserValidators
 {
     public class LoginViewModelValidator : AbstractValidator<LoginViewModel>
     {

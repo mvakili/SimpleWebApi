@@ -1,4 +1,4 @@
-namespace WebApi.Configurations
+namespace Business.Configurations
 {
     public class JWTSettings
     {

@@ -1,7 +1,7 @@
 using System;
 using System.ComponentModel.DataAnnotations;
 
-namespace WebApi.Entities
+namespace Model.Entities
 {
     public class User
     {

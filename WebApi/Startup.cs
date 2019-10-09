@@ -2,19 +2,20 @@
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using WebApi.Configurations;
-using WebApi.Services;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Mvc;
 using AutoMapper;
-using WebApi.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
-using WebApi.ViewModels.UserModels;
 using FluentValidation.AspNetCore;
 using Newtonsoft.Json.Serialization;
+using DataAccess;
+using Business.Services;
+using Business.Configurations;
+using WebAPI.Middlewares;
+using Model.Mappers;
 
 namespace WebApi
 {
@@ -31,7 +32,7 @@ namespace WebApi
         {
             #region Configure DbContext
             services.AddDbContext<WebApiDbContext>(options =>
-                options.UseSqlite(Configuration.GetConnectionString("WebApiContext")));
+                options.UseSqlite(Configuration.GetConnectionString("WebApiContext"), b => b.MigrationsAssembly("DataAccess")));
             #endregion
 
             #region Configure AutoMapper
@@ -99,6 +100,8 @@ namespace WebApi
             {
                 app.UseHsts();
             }
+
+            app.UseMiddleware<ExceptionHandlerMiddleware>();
 
             // global cors policy
             app.UseCors(x => x

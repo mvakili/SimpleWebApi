@@ -1,6 +1,7 @@
 using Microsoft.EntityFrameworkCore;
+using Model.Entities;
 
-namespace WebApi.Entities {
+namespace DataAccess {
     public class WebApiDbContext : DbContext {
 
         public WebApiDbContext (DbContextOptions<WebApiDbContext> options)

@@ -1,11 +1,9 @@
+using Model.ViewModels.UserModels;
 using System;
-using System.Collections.Generic;
 using System.Threading.Tasks;
-using WebApi.Entities;
-using WebApi.ViewModels;
-using WebApi.ViewModels.UserModels;
 
-namespace WebApi.Services
+
+namespace Business.Services
 {
     public interface IUserService
     {

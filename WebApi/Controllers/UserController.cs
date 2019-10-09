@@ -1,12 +1,11 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
-using WebApi.Services;
-using AutoMapper;
-using WebApi.ViewModels.UserModels;
-using System.Security.Claims;
 using System;
 using System.Threading.Tasks;
-using WebApi.Exceptions.UserExceptions;
+using Model.ViewModels.UserModels;
+using System.Security.Claims;
+using Model.Exceptions.UserExceptions;
+using Business.Services;
 
 namespace WebApi.Controllers
 {
@@ -15,9 +14,9 @@ namespace WebApi.Controllers
     [Route("[controller]")]
     public class UserController : ControllerBase
     {
-        private readonly Services.IUserService _userService;
+        private readonly IUserService _userService;
 
-        public UserController(Services.IUserService userService)
+        public UserController(IUserService userService)
         {
             _userService = userService;
         }
