@@ -110,7 +110,7 @@ namespace WebApi
             });
             #endregion
 
-            services.AddSignalR();
+            services.AddSignalR().AddAzureSignalR();
 
             #region Add Repositories
             services.AddScoped<IUserRepository, UserRepository>();
@@ -176,7 +176,7 @@ namespace WebApi
             app.UseCors("CorsPolicy");
             app.UseAuthentication();
 
-            app.UseSignalR(routes =>
+            app.UseAzureSignalR(routes =>
             {
                 routes.MapHub<ChatHub>("/chatHub");
             });
