@@ -67,6 +67,12 @@ namespace Business.Services
             return _mapper.Map<UserViewModel>(user);
         }
 
+        public UserViewModel GetUserByUsername(string username)
+        {
+            var user = _userRepository.SingleOrDefault(u => u.Username == username);
+            return _mapper.Map<UserViewModel>(user);
+        }
+
         public async Task RegisterAsync(RegisterViewModel input)
         {
             var user = _mapper.Map<User>(input);

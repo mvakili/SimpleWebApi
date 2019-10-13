@@ -11,7 +11,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DataAccess", "DataAccess\Da
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Business", "Service\Business.csproj", "{5E8AB9C8-265A-425E-BACC-14E45A7D7008}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebAPITests", "WebAPITests\WebAPITests.csproj", "{6373B567-94BD-46E4-B3B6-4E36481A581F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebAPITests", "WebAPITests\WebAPITests.csproj", "{6373B567-94BD-46E4-B3B6-4E36481A581F}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

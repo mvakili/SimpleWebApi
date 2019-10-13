@@ -13,6 +13,7 @@ namespace Business.Services
         string Authenticate(LoginViewModel input);
         Task RegisterAsync(RegisterViewModel input);
         UserViewModel GetIdentityUser(ClaimsIdentity identity);
+        UserViewModel GetUserByUsername(string username);
 
     }
 }

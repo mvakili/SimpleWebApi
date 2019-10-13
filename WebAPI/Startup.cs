@@ -19,6 +19,10 @@ using Model.Mappers;
 using DataAccess.Repositories;
 using System.Collections.Generic;
 using Model.Entities;
+using Business.SignalRHubs;
+using System.Threading.Tasks;
+using Business.Providers;
+using Microsoft.AspNetCore.SignalR;
 
 namespace WebApi
 {
@@ -48,7 +52,16 @@ namespace WebApi
             services.AddSingleton(mapper);
             #endregion
 
-            services.AddCors();
+
+            services.AddCors(options =>
+            {
+                options.AddPolicy("CorsPolicy",
+                    builder => builder.WithOrigins("http://localhost:4200")
+                    .AllowAnyMethod()
+                    .AllowAnyHeader()
+                    .AllowCredentials());
+            });
+
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1).AddFluentValidation(fv => fv.RegisterValidatorsFromAssemblyContaining<User>())
             .AddJsonOptions(option => option.SerializerSettings.ContractResolver = new DefaultContractResolver());
 
@@ -76,15 +89,41 @@ namespace WebApi
                     ValidateIssuer = false,
                     ValidateAudience = false
                 };
+
+                x.Events = new JwtBearerEvents
+                {
+                    OnMessageReceived = context =>
+                    {
+                        var accessToken = context.Request.Query["access_token"];
+
+                        // If the request is for our hub...
+                        var path = context.HttpContext.Request.Path;
+                        if (!string.IsNullOrEmpty(accessToken) &&
+                            (path.StartsWithSegments("/chatHub")))
+                        {
+                            // Read the token out of the query string
+                            context.Token = accessToken;
+                        }
+                        return Task.CompletedTask;
+                    }
+                };
             });
             #endregion
+
+            services.AddSignalR();
 
             #region Add Repositories
             services.AddScoped<IUserRepository, UserRepository>();
             #endregion
 
+            #region Add Providers
+            services.AddSingleton<IUserIdProvider, NameUserIdProvider>();
+            #endregion
+
             #region Add Services
             services.AddScoped<IUserService, UserService>();
+            services.AddScoped<IChatService, ChatService>();
+
             #endregion
 
             #region Configure Swagger
@@ -134,14 +173,14 @@ namespace WebApi
             app.UseMiddleware<ExceptionHandlerMiddleware>();
 
             // global cors policy
-            app.UseCors(x => x
-                .AllowAnyOrigin()
-                .AllowAnyMethod()
-                .AllowAnyHeader());
-
+            app.UseCors("CorsPolicy");
             app.UseAuthentication();
 
-            
+            app.UseSignalR(routes =>
+            {
+                routes.MapHub<ChatHub>("/chatHub");
+            });
+
             app.UseMvc();
         }
     }
