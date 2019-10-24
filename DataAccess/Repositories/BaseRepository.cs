@@ -32,6 +32,11 @@ namespace DataAccess.Repositories
         public List<T> Get() {
             return Get(x => true, x => x);
         }
+
+        public List<T> Get(Expression<Func<T, bool>> match)
+        {
+            return Get(match, x => x);
+        }
         public List<R> Get<R>(Expression<Func<T, bool>> match, Expression<Func<T, R>> select) {
 
             var q = this.GetQueryable(match);

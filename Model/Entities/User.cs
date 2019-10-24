@@ -1,3 +1,4 @@
+using NetTopologySuite.Geometries;
 using System;
 using System.ComponentModel.DataAnnotations;
 
@@ -14,5 +15,6 @@ namespace Model.Entities
         [Required(AllowEmptyStrings = false)]
         public string Username { get; set; }
         public byte[] PasswordHash { get; set; }
+        public Point Location { get; set; }
     }
 }

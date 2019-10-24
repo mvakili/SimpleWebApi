@@ -39,13 +39,14 @@ namespace WebApi
         {
             #region Configure DbContext
             services.AddDbContext<WebApiDbContext>(options =>
-                options.UseSqlite(Configuration.GetConnectionString("WebApiContext"), b => b.MigrationsAssembly("DataAccess")));
+                options.UseSqlite(Configuration.GetConnectionString("WebApiContext"), b => b.MigrationsAssembly("DataAccess").UseNetTopologySuite()));
             #endregion
 
             #region Configure AutoMapper
             var mappingConfig = new MapperConfiguration(mc =>
             {
                 mc.AddProfile(new UserMapProfile());
+                mc.AddProfile(new LocationMapProfile());
             });
 
             IMapper mapper = mappingConfig.CreateMapper();
@@ -123,6 +124,8 @@ namespace WebApi
             #region Add Services
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<IChatService, ChatService>();
+            services.AddScoped<IUserLocationService, UserLocationService>();
+
 
             #endregion
 

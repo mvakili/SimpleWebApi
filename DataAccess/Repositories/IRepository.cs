@@ -12,6 +12,7 @@ namespace DataAccess.Repositories
         T Edit(T entity);
 
         List<T> Get();
+        List<T> Get(Expression<Func<T, bool>> match);
         List<R> Get<R>(Expression<Func<T, bool>> match, Expression<Func<T, R>> select);
 
         T SingleOrDefault(Expression<Func<T, bool>> match);
